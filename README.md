@@ -1,150 +1,155 @@
-# 🧠 AI Study Assistant
+# AI Study Assistant
 
-A full-stack web application that converts any topic or notes into interactive learning tools — flashcards and quizzes — powered by the Gemini AI API. Built with Next.js 15, TypeScript, and Tailwind CSS.
+An AI-powered study assistant that transforms natural language prompts into interactive learning tools. Simply describe what you want to study, and the application generates structured educational content with a clean, responsive interface.
 
-## ✨ Features
+## Live Demo
 
-- **AI-Powered Tool Generation** — Paste any topic or notes; the AI decides whether to produce a flashcard deck or a multiple-choice quiz.
-- **Flashcard Viewer** — 3-D flip animation, keyboard navigation (← → Space), progress tracking, and a completion banner.
-- **Interactive Quiz** — Single-question flow with option selection, answer submission, instant explanations, and a final score screen with per-question review.
-- **Stale-Response Protection** — Incrementing request IDs ensure a slow response never overwrites a newer one.
-- **Request Timeout** — Gemini requests abort after 30 seconds so the UI never hangs indefinitely.
-- **Zod Validation** — Every AI response is validated against a strict schema on both the server and client before it reaches the UI.
-- **Error Handling** — Friendly messages for malformed JSON, schema failures, API errors, timeouts, and empty responses — all with a retry button.
-- **Dark / Light Mode** — System-preference aware theme toggle.
-- **Fully Responsive** — Works on mobile, tablet, and desktop.
+(Add your deployed URL here)
 
-## 🚀 Tech Stack
+## Features
 
-| Layer | Technology |
-|---|---|
-| Framework | Next.js 15 (App Router) |
-| Language | TypeScript |
-| Styling | Tailwind CSS + shadcn/ui |
-| AI | Google Gemini 2.0 Flash (`@google/genai`) |
-| Validation | Zod |
-| Icons | Lucide React |
-| Theming | next-themes |
-| Notifications | Sonner |
+### AI-Powered Study Tool Generation
+- Generate interactive study tools from plain English prompts.
+- Supports quizzes, flashcards, summaries, timelines, concept maps, and more.
+- Powered by OpenRouter AI for reliable content generation.
 
-## 📦 Setup
+### Smart Prompt Assistance
+- Ready-to-use suggestion chips.
+- Recent prompt history.
+- Topic browser for quick exploration.
+- Prompt validation before generation.
 
-### Prerequisites
+### Interactive Learning Dashboard
+- Clean and modern dashboard.
+- Continue Learning section.
+- Personalized study tips.
+- Organized study experience.
 
-- Node.js 18+
-- A [Google AI Studio](https://aistudio.google.com/) API key
+### Robust User Experience
+- Loading indicators during AI generation.
+- Error handling with recovery options.
+- Empty states for better usability.
+- Generation status updates.
 
-### 1. Clone the repository
+### Export & Recovery
+- Export generated study tools.
+- Recover previous generation attempts.
+- Better handling of interrupted AI responses.
 
-```bash
-git clone <repository-url>
-cd ai-study-assistant
+### Modern UI
+- Responsive design.
+- Dark mode support.
+- Clean typography.
+- Smooth animations.
+- Mobile-friendly interface.
+
+## Tech Stack
+
+### Frontend
+- Next.js 15
+- React 19
+- TypeScript
+- Tailwind CSS
+
+### AI
+- OpenRouter API
+- OpenAI SDK
+- Structured JSON Output
+
+### Validation
+- Zod Schema Validation
+
+### Development Tools
+- ESLint
+- PostCSS
+- npm
+
+## Project Structure
+
+```
+app/
+ ├── api/
+ │    └── generate/
+ ├── components/
+ ├── hooks/
+ ├── lib/
+ │    ├── ai/
+ │    ├── recovery/
+ │    └── schemas/
+ ├── types/
+ └── utils/
 ```
 
-### 2. Install dependencies
+## Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/Nairayadav/study-assistant-ai.git
+```
+
+Go to the project folder
+
+```bash
+cd study-assistant-ai
+```
+
+Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Configure environment variables
-
-```bash
-cp env.sample .env.local
-```
-
-Open `.env.local` and add your Gemini API key:
+Create a `.env.local` file
 
 ```env
-GEMINI_API_KEY=your_gemini_api_key_here
+OPENROUTER_API_KEY=your_api_key
 ```
 
-> The API key is only ever read on the server (`app/api/generate/route.ts`) and is never exposed to the browser.
-
-### 4. Start the development server
+Run the development server
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
-
-## 🗂️ Project Structure
+Open
 
 ```
-ai-study-assistant/
-├── app/
-│   ├── api/generate/route.ts   # POST /api/generate — calls Gemini, validates response
-│   ├── layout.tsx              # Root layout (Navbar, Footer, ThemeProvider)
-│   ├── page.tsx                # Homepage — prompt input + tool output
-│   └── globals.css
-├── components/
-│   ├── PromptInput.tsx         # Textarea + submit form
-│   ├── LoadingState.tsx        # Spinner shown while waiting for Gemini
-│   ├── ErrorState.tsx          # Error banner with retry button
-│   ├── EmptyState.tsx          # Placeholder before first generation
-│   └── tools/
-│       ├── ToolRenderer.tsx    # Dispatches to the correct tool component
-│       ├── FlashcardTool.tsx   # Flip-card UI
-│       └── QuizTool.tsx        # Multiple-choice quiz UI
-├── lib/
-│   ├── ai/
-│   │   ├── generateTool.ts     # Gemini call, JSON parsing, Zod validation
-│   │   └── systemPrompt.ts     # LLM system instruction
-│   └── schemas/
-│       └── toolSchema.ts       # Zod discriminated-union schema
-├── types/
-│   └── tool.ts                 # TypeScript types derived from Zod schema
-└── utils/
-    └── constants.ts            # APP_NAME, PROMPT_MAX_LENGTH, REQUEST_TIMEOUT_MS
+http://localhost:3000
 ```
 
-## 🔄 Data Flow
-
-```
-User enters topic or notes
-        ↓
-POST /api/generate  { prompt }
-        ↓
-Gemini 2.0 Flash
-        ↓
-Strip markdown fences → JSON.parse()
-        ↓
-Zod validation (toolSchema)
-        ↓
-Return { toolType, title, description, data }
-        ↓
-Client-side Zod re-validation
-        ↓
-ToolRenderer → FlashcardTool | QuizTool
-```
-
-## 📸 Screenshots
-
-| Homepage | Flashcards | Quiz |
-|---|---|---|
-| ![Homepage](public/homepage.png) | _(flashcard screenshot)_ | _(quiz screenshot)_ |
-
-## 🚀 Deployment
-
-### Vercel (recommended)
-
-1. Push to GitHub.
-2. Import the repository on [vercel.com](https://vercel.com).
-3. Add `GEMINI_API_KEY` in **Settings → Environment Variables**.
-4. Deploy.
-
-### Manual
+## Build
 
 ```bash
 npm run build
-npm start
 ```
 
-## 📄 License
+## Future Improvements
 
-MIT
+- User authentication
+- Save study history
+- PDF export
+- Voice input
+- AI chat tutor
+- Spaced repetition
+- Progress analytics
+- Collaborative study sessions
+
+## Screenshots
+
+Add screenshots of:
+- Home Page
+- AI Tool Generation
+- Dashboard
+- Generated Study Tool
+
+## Author
+
+**Naira Yadav**
+
+- GitHub: https://github.com/Nairayadav
+- LinkedIn: https://www.linkedin.com/in/naira-yadav-0141802a8
 
 ---
 
-**Made with ❤️ by Ankit Ydv**
+Built as part of the **FLAM Frontend Internship Assignment** using Next.js, TypeScript, Tailwind CSS, and OpenRouter AI.
