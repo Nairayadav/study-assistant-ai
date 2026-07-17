@@ -134,19 +134,19 @@ npm run build
 
 ## 📸 Screenshots
 
-> Create a folder named `screenshots` in the project root and add your images.
-
 ### Home Page
 
-![Home](screenshots/home.png)
+<img width="1227" height="860" alt="home" src="https://github.com/user-attachments/assets/b9c8fccd-981f-42d0-b39a-9de80d70f4ef" />
+
 
 ### Prompt Generation
 
-![Prompt Generation](screenshots/generate.png)
+<img width="1306" height="692" alt="generate" src="https://github.com/user-attachments/assets/c0b5cdc0-3556-4444-a219-1c6bc656569e" />
+
 
 ### Dashboard
 
-![Dashboard](screenshots/dashboard.png)
+<img width="462" height="861" alt="dashboard" src="https://github.com/user-attachments/assets/f76424c6-0136-46a1-b39f-b99b76a3e7ff" />
 
 ---
 
