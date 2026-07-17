@@ -90,7 +90,7 @@ export const GenerateQuizContent = async (content: string) => {
 				},
 				{ role: "user", content: content },
 			],
-			model: "gpt-4o-mini",
+			model: "google/gemini-2.5-flash",
 			response_format: zodResponseFormat(response_structure, "response_structure"),
 		});
 		return JSON.parse(shortDescription.choices[0].message.content as string) || null;

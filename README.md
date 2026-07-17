@@ -1,217 +1,150 @@
-# 🧠 AI Quiz Generator
+# 🧠 AI Study Assistant
 
-A modern, full-stack web application that generates personalized quizzes using AI. Built with Next.js 14, TypeScript, and Appwrite for authentication and data storage.
-
-### Test Credentials:
-- Email: `ankit@mail.com`
-- Password: `ankit123`
+A full-stack web application that converts any topic or notes into interactive learning tools — flashcards and quizzes — powered by the Gemini AI API. Built with Next.js 15, TypeScript, and Tailwind CSS.
 
 ## ✨ Features
 
-### 🎯 Core Functionality
-- **AI-Powered Quiz Generation**: Create custom quizzes based on subjects, topics, and difficulty levels
-- **Smart Authentication**: Secure user authentication with session management
-- **Real-time Dashboard**: Track quiz performance and completion statistics
-- **Responsive Design**: Beautiful, modern UI that works on all devices
-- **Dark/Light Mode**: Built-in theme switching for better user experience
-
-### 🔐 Security & Protection
-- **Route Protection**: Middleware-based authentication for protected routes
-- **Session Management**: Automatic session cleanup and conflict prevention
-- **Client-Side Guards**: Additional client-side authentication checks
-- **Secure Cookies**: HttpOnly cookies with proper security attributes
-
-### 📊 Analytics & Tracking
-- **Performance Metrics**: Track average scores and completion rates
-- **Quiz History**: View all completed quizzes with detailed results
-- **Progress Tracking**: Monitor learning progress over time
-- **Sorting & Filtering**: Results sorted by completion date (newest first)
+- **AI-Powered Tool Generation** — Paste any topic or notes; the AI decides whether to produce a flashcard deck or a multiple-choice quiz.
+- **Flashcard Viewer** — 3-D flip animation, keyboard navigation (← → Space), progress tracking, and a completion banner.
+- **Interactive Quiz** — Single-question flow with option selection, answer submission, instant explanations, and a final score screen with per-question review.
+- **Stale-Response Protection** — Incrementing request IDs ensure a slow response never overwrites a newer one.
+- **Request Timeout** — Gemini requests abort after 30 seconds so the UI never hangs indefinitely.
+- **Zod Validation** — Every AI response is validated against a strict schema on both the server and client before it reaches the UI.
+- **Error Handling** — Friendly messages for malformed JSON, schema failures, API errors, timeouts, and empty responses — all with a retry button.
+- **Dark / Light Mode** — System-preference aware theme toggle.
+- **Fully Responsive** — Works on mobile, tablet, and desktop.
 
 ## 🚀 Tech Stack
 
-### Frontend
-- **Next.js 14**: React framework with App Router
-- **TypeScript**: Type-safe development
-- **Tailwind CSS**: Utility-first CSS framework
-- **Zustand**: State management with persistence
-- **React Hook Form**: Form handling with validation
-- **Zod**: Schema validation
-- **Lucide React**: Beautiful icons
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS + shadcn/ui |
+| AI | Google Gemini 2.0 Flash (`@google/genai`) |
+| Validation | Zod |
+| Icons | Lucide React |
+| Theming | next-themes |
+| Notifications | Sonner |
 
-### Backend & Services
-- **Appwrite**: Backend-as-a-Service for authentication and database
-- **OpenAI GPT**: AI-powered quiz generation
-- **Vercel**: Deployment and hosting
-
-### UI Components
-- **shadcn/ui**: Modern, accessible component library
-- **Sonner**: Toast notifications
-- **Framer Motion**: Smooth animations
-
-## 📦 Installation
+## 📦 Setup
 
 ### Prerequisites
-- Node.js 18+ 
-- Yarn or npm
-- Appwrite account
-- OpenAI API key
 
-### 1. Clone the Repository
+- Node.js 18+
+- A [Google AI Studio](https://aistudio.google.com/) API key
+
+### 1. Clone the repository
+
 ```bash
 git clone <repository-url>
-cd ai-quiz-generator
+cd ai-study-assistant
 ```
 
-### 2. Install Dependencies
+### 2. Install dependencies
+
 ```bash
-yarn install
-# or
 npm install
 ```
 
-### 3. Environment Setup
-Copy the environment sample file and configure your variables:
+### 3. Configure environment variables
 
 ```bash
 cp env.sample .env.local
 ```
 
-Update `.env.local` with your credentials:
+Open `.env.local` and add your Gemini API key:
 
 ```env
-# Appwrite Configuration
-NEXT_PUBLIC_APPWRITE_HOST_URL=appwrite_host_url
-NEXT_PUBLIC_PROJECT_ID=project_id
-APPWRITE_API_KEY=appwrite_api_key
-
-# OpenAI Configuration
-OPENAI_API_KEY=openai_api_key
-
-# Database IDs (from Appwrite)
-NEXT_PUBLIC_DATABASE_ID=database_id
-NEXT_PUBLIC_QUIZ_COLLECTION_ID=quiz_collection_id
-NEXT_PUBLIC_QUESTION_COLLECTION_ID=question_collection_id
-NEXT_PUBLIC_RESULTS_COLLECTION_ID=results_collection_id
-NEXT_PUBLIC_USER_COLLECTION_ID=user_collection_id
+GEMINI_API_KEY=your_gemini_api_key_here
 ```
 
-### 4. Appwrite Setup
+> The API key is only ever read on the server (`app/api/generate/route.ts`) and is never exposed to the browser.
 
-#### Create Collections
-1. **Users Collection**: Store user profiles
-2. **Quizzes Collection**: Store quiz metadata
-3. **Questions Collection**: Store individual questions
-4. **Results Collection**: Store quiz completion results
+### 4. Start the development server
 
-#### Set Permissions
-Configure appropriate read/write permissions for each collection based on user roles.
-
-### 5. Run Development Server
 ```bash
-yarn dev
-# or
 npm run dev
 ```
 
-Visit [http://localhost:3000](http://localhost:3000) to see the application.
+Open [http://localhost:3000](http://localhost:3000).
 
-## 🎮 Usage
+## 🗂️ Project Structure
 
-### For Users
-
-1. **Sign Up/Login**: Create an account or log in to your existing account
-2. **Generate Quiz**: Navigate to the "Generate" page
-3. **Configure Quiz**: 
-   - Enter subject (e.g., "Mathematics", "Physics")
-   - Add specific topics (press Enter to add each topic)
-   - Select difficulty level (Easy, Medium, Hard)
-   - Set number of questions
-   - Add optional additional instructions
-4. **Take Quiz**: Complete the generated quiz
-5. **View Results**: Check your performance in the dashboard
-
-### For Developers
-
-#### Project Structure
 ```
-ai-quiz-generator/
-├── app/                    # Next.js App Router pages
-│   ├── (auth)/            # Authentication pages
-│   ├── api/               # API routes
-│   ├── dashboard/         # Protected dashboard
-│   ├── generate/          # Quiz generation
-│   ├── quiz/              # Quiz taking interface
-│   └── results/           # Results display
-├── components/            # Reusable UI components
-│   ├── ui/               # shadcn/ui components
-│   ├── auth-guard.tsx    # Authentication wrapper
-│   └── ...
-├── store/                # Zustand state management
-│   └── auth.ts           # Authentication store
-├── utils/                # Utility functions
-├── models/               # Appwrite configuration
-└── middleware.ts         # Route protection
+ai-study-assistant/
+├── app/
+│   ├── api/generate/route.ts   # POST /api/generate — calls Gemini, validates response
+│   ├── layout.tsx              # Root layout (Navbar, Footer, ThemeProvider)
+│   ├── page.tsx                # Homepage — prompt input + tool output
+│   └── globals.css
+├── components/
+│   ├── PromptInput.tsx         # Textarea + submit form
+│   ├── LoadingState.tsx        # Spinner shown while waiting for Gemini
+│   ├── ErrorState.tsx          # Error banner with retry button
+│   ├── EmptyState.tsx          # Placeholder before first generation
+│   └── tools/
+│       ├── ToolRenderer.tsx    # Dispatches to the correct tool component
+│       ├── FlashcardTool.tsx   # Flip-card UI
+│       └── QuizTool.tsx        # Multiple-choice quiz UI
+├── lib/
+│   ├── ai/
+│   │   ├── generateTool.ts     # Gemini call, JSON parsing, Zod validation
+│   │   └── systemPrompt.ts     # LLM system instruction
+│   └── schemas/
+│       └── toolSchema.ts       # Zod discriminated-union schema
+├── types/
+│   └── tool.ts                 # TypeScript types derived from Zod schema
+└── utils/
+    └── constants.ts            # APP_NAME, PROMPT_MAX_LENGTH, REQUEST_TIMEOUT_MS
 ```
 
-#### Key Components
+## 🔄 Data Flow
 
-**Authentication Flow**
-- `middleware.ts`: Server-side route protection
-- `components/auth-guard.tsx`: Client-side authentication
-- `store/auth.ts`: Authentication state management
-- `utils/auth-utils.ts`: Cookie management
+```
+User enters topic or notes
+        ↓
+POST /api/generate  { prompt }
+        ↓
+Gemini 2.0 Flash
+        ↓
+Strip markdown fences → JSON.parse()
+        ↓
+Zod validation (toolSchema)
+        ↓
+Return { toolType, title, description, data }
+        ↓
+Client-side Zod re-validation
+        ↓
+ToolRenderer → FlashcardTool | QuizTool
+```
 
-**Quiz Generation**
-- `app/generate/page.tsx`: Quiz configuration interface
-- `app/api/create/route.ts`: Quiz generation API
-- `utils/gpt/gpt.ts`: OpenAI integration
+## 📸 Screenshots
 
-**Dashboard & Analytics**
-- `app/dashboard/page.tsx`: Main dashboard
-- `components/charts/quiz-stats.tsx`: Performance charts
-- `components/completed-quizzes.tsx`: Quiz history
-
-## 🔧 Configuration
-
-### Customizing Quiz Generation
-Edit `utils/gpt/gpt.ts` to modify the AI prompt and quiz generation logic.
-
-### Styling
-The project uses Tailwind CSS. Customize styles in `tailwind.config.ts` and `app/globals.css`.
-
-### Authentication
-Modify `store/auth.ts` to change authentication behavior or add additional user roles.
+| Homepage | Flashcards | Quiz |
+|---|---|---|
+| ![Homepage](public/homepage.png) | _(flashcard screenshot)_ | _(quiz screenshot)_ |
 
 ## 🚀 Deployment
 
-### Vercel (Recommended)
-1. Connect your GitHub repository to Vercel
-2. Configure environment variables in Vercel dashboard
-3. Deploy automatically on push to main branch
+### Vercel (recommended)
 
-### Manual Deployment
+1. Push to GitHub.
+2. Import the repository on [vercel.com](https://vercel.com).
+3. Add `GEMINI_API_KEY` in **Settings → Environment Variables**.
+4. Deploy.
+
+### Manual
+
 ```bash
-# Build the application
-yarn build
-
-# Start production server
-yarn start
+npm run build
+npm start
 ```
 
-## 🤝 Contributing
+## 📄 License
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+MIT
 
-## 🆘 Support
-
-If you encounter any issues:
-
-1. Check the [Issues](https://github.com/your-repo/issues) page
-2. Create a new issue with detailed information
-3. Include steps to reproduce the problem
+---
 
 **Made with ❤️ by Ankit Ydv**
